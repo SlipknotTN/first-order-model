@@ -1,6 +1,4 @@
 import face_alignment
-import skimage.io
-import numpy
 from argparse import ArgumentParser
 from skimage import img_as_ubyte
 from skimage.transform import resize
@@ -67,7 +65,13 @@ def compute_bbox(start, end, fps, tube_bbox, frame_shape, inp, increase_area=0.1
     end = end / fps
     time = end - start
 
-    return f'ffmpeg -i {inp} -ss {start} -t {time} -filter:v "crop={w}:{h}:{left}:{top}, scale=256:256" crop.mp4'
+    basename = os.path.basename(inp)
+    dirname = os.path.dirname(inp)
+
+    new_basename = basename[:basename.rfind(".")] + "_256" + basename[basename.rfind("."):]
+
+    return f'ffmpeg -i {inp} -ss {start} -t {time} -filter:v "crop={w}:{h}:{left}:{top}, scale=256:256" ' \
+           f'{os.path.join(dirname, "crops", new_basename)}'
 
 
 def compute_bbox_trajectories(trajectories, fps, frame_shape, args):
