@@ -1,0 +1,8 @@
+# Python and IDE
+.idea
+*.pyc
+
+# Working files
+checkpoints
+data/inputs
+data/outputs
